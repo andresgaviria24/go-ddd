@@ -1,0 +1,5 @@
+#Ejecutables
+*.exe
+
+#Carpetas
+.vscode/

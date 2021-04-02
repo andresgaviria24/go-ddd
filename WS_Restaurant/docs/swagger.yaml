@@ -1,0 +1,316 @@
+openapi: '3.0.2'
+info:
+  title: Shared-RelationUser 
+  description: API de consulta de información de usuarios, mesas y roles
+  termsOfService: https://www.tecnofactory.com.co
+  contact:
+    name: John Castellanos
+    email: john.castellanos@tecnofactory.com.co
+  version: '0.3.0'
+servers:  
+- url: http://localhost:8080
+  description: Url de desarrollo
+- url: http://shared-relationusertest.traefik.desktfactory.com
+  description: Url de pruebas
+
+paths:
+  /user-inrol/{constantName}:
+    get:
+      tags:
+        - "User"
+      summary: "Obtiene la información del un elemento de servicio según su ID."
+      description: ""
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: X-Lang
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: X-Tenant
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: idServiceDesk
+        in: query
+        description: "Código de identificación de la mesa de servicios."
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - in: path
+        name: constantName
+        required: true
+        schema:
+          type: string
+          enum:
+           - ADMIN
+           - AGENT
+           - FINAL_USER
+           - SUPERVISOR
+           - MANAGER 
+      responses:
+        200:
+          description: Success
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersInRolDto'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        404:
+          description: No Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        422:
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+  /user-detail/servicedesk/{idServiceDesk}:
+    get:
+      tags:
+        - "User"
+      summary: "Obtiene la información detallada de los usuarios de una mesa de servicio"
+      description: ""
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: X-Lang
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: X-Tenant
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: idServiceDesk
+        in: path
+        description: "Código de identificación de la mesa de servicios."
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: order
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: pageNumber
+        required: true
+        schema:
+          type: integer
+      - in: query
+        name: rowsOfPage
+        required: true
+        schema:
+          type: integer
+      - in: query
+        name: allRows
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: Success
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/resultUserDetail'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        404:
+          description: No Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        422:
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+  /admin-desk:
+    get:
+      tags:
+        - "User"
+      summary: "Obtiene todos los usuarios con rol administrador de mesa"
+      description: ""
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: X-Lang
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: X-Tenant
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Success
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User' 
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        404:
+          description: No Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+components:
+  securitySchemes:
+    bearerAuth:        
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  
+  schemas:
+    Response:
+      type: "object"
+      properties:
+        status:
+          type: "string"
+          description: "Código del estado"
+        message:
+          type: "string"
+          description: "Es el mensaje a mostrar en el front y por lo tanto dependiendo del lenguaje se visualizará"
+        description:
+          type: "string"
+          description: "Descripción del estado si fue un error se incluira en este atributo"                        
+    UsersInRolDto:
+      required:
+      - nameRol
+      type: object
+      properties:
+        nameRol:
+          type: string
+          description: "Nombre del rol."    
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    User:
+      required:
+        - idUser
+        - fullNameUser
+        - email
+      type: object 
+      properties:
+        idUser:
+          type: string
+          format: uuid
+          description: "Código de identificación del usuario"
+        fullNameUser:
+          type: string
+          example: "John Doe"
+          description: "Nombre completo de usuario"
+        email:
+          type: string
+          format: email 
+          description: "Correo electrónico del usuario"   
+    resultUserDetail:
+      properties:
+        page:
+          type: number
+          example: 1
+        pages:
+          type: number
+          example: 5
+        total:
+          type: number
+          example: 100
+        userDetail:
+          type: array
+          items:
+             $ref: '#/components/schemas/userDetail'
+    userDetail:
+      properties:
+        idUser:
+          type: string
+          format: uuid
+          description: "Código de identificación del usuario"
+        firstName:
+          type: string
+          description: Nombre del usuario
+        lastName:
+          type: string
+          description: Apellido del usuario
+        email:
+          type: string
+          format: email
+          description: correo del usuario
+        phone:
+          type: string
+          example: (+571) 3052036
+          description: telefono del usuario
+        charge:
+          type: string
+          example: Manager
+          description: cargo del usuario
+        idCompany:
+          type: string
+          format: uuid
+          description: id empresa a la que pertenece el usuario
+        company:
+          type: string
+          example: Tecnofactory S.A.S
+          description: empresa a la que pertenece el usuario
+        idRol:
+          type: string
+          format: uuid
+          description: id rol al que pertenece el usuario
+        rol:
+          type: string
+          example: Agent
+          description: rol al que pertenece el usuario
+        
+
+        
