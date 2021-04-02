@@ -1,6 +1,7 @@
 package persistence
 
 import (
+	"os"
 	"ws_restaurant/infrastructure/repository"
 
 	"gorm.io/driver/mysql"
@@ -14,7 +15,7 @@ type DbHelper struct {
 
 func InitDbHelper() (*DbHelper, error) {
 
-	dsn := "userName:password@tcp(localhost)/restaurant?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := os.Getenv("DB_USER") + ":" + os.Getenv("DB_PASSWORD") + "@tcp(" + os.Getenv("DB_HOST") + ":" + os.Getenv("DB_PORT") + ")/" + os.Getenv("DB_NAME") + "?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn))
 	if err != nil {
 		panic(err)

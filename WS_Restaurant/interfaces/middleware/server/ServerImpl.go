@@ -8,8 +8,8 @@ import (
 	"ws_restaurant/interfaces/middleware"
 
 	"github.com/gin-gonic/gin"
-	//	swaggerFiles "github.com/swaggo/files" // swagger embed files
-	//	ginSwagger "github.com/swaggo/gin-swagger"
+	swaggerFiles "github.com/swaggo/files" // swagger embed files
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type ServerImpl struct {
@@ -21,7 +21,7 @@ func InitServer() Server {
 	router := gin.Default()
 	router.Use(middleware.CORSMiddleware())
 	swaggerDocs()
-	//router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	application.InitRestaurantController(router)
 	serverImpl.router = router
 	return serverImpl
