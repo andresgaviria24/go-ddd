@@ -18,5 +18,5 @@ require (
 	golang.org/x/crypto v0.0.0-20210220033148-5ea612d1eb83 // indirect
 	gopkg.in/jeevatkm/go-model.v1 v1.1.0 // indirect
 	gorm.io/driver/mysql v1.0.5
-	gorm.io/gorm v1.21.3
+	gorm.io/gorm v1.9.19
 )
