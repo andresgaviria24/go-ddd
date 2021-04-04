@@ -1,2 +1,5 @@
+#Ejecutables
+*.exe
 
-WS_Restaurant/.env
+#Carpetas
+.vscode/
