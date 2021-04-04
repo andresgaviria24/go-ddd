@@ -9,7 +9,7 @@ info:
 servers:  
 - url: http://localhost:8080
   description: Url de desarrollo
-- url: http://ambiente de pruebas
+- url: https://restaurantag.herokuapp.com/
   description: Url de pruebas
 
 paths:
