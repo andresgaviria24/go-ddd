@@ -1,0 +1,126 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "WS_Food",
+    "description": "API de consulta de comidas de un restaurante",
+    "contact": {
+      "name": "Andrés Gaviria",
+      "email": "andres_felipe_gaviria28@hotmail.com"
+    },
+    "version": "0.1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Url de desarrollo"
+    },
+    {
+      "url": "http://ambiente de pruebas",
+      "description": "Url de pruebas"
+    }
+  ],
+  "paths": {
+    "/food": {
+      "get": {
+        "tags": [
+          "Food"
+        ],
+        "summary": "Obtiene un arreglo de comidas con su nombre y precio",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Food"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Response": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Código del estado"
+          },
+          "message": {
+            "type": "string",
+            "description": "Es el mensaje a mostrar en el front y por lo tanto dependiendo del lenguaje se visualizará"
+          },
+          "description": {
+            "type": "string",
+            "description": "Descripción del estado si fue un error se incluira en este atributo"
+          }
+        }
+      },
+      "Food": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "1"
+          },
+          "name": {
+            "type": "string",
+            "description": "Bandeja Paisa"
+          },
+          "prices": {
+            "type": "number",
+            "description": "8000"
+          }
+        }
+      }
+    }
+  }
+}

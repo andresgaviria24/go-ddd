@@ -3,7 +3,7 @@ package persistence
 import (
 	"ws_restaurant/domain/entity"
 
-	"gorm.io/gorm"
+	"github.com/jinzhu/gorm"
 )
 
 type FoodRepositoryImpl struct {
